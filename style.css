@@ -229,7 +229,8 @@ section {
   padding-bottom: 80px;
 }
 .hero-logo {
-  width: 200px;
+  width: 500px;
+  max-width: 90vw;
   margin-bottom: 24px;
 }
 
