@@ -391,7 +391,12 @@
           <div class="pilot-form-row">
             <div class="pilot-form-label">Pilot Type *</div>
             <div class="pilot-form-field">
-              <div class="pilot-type-display" id="pilotTypeDisplay">Select a pilot type above</div>
+              <select id="pilotTypeSelect" onchange="selectPilotFromDropdown(this.value)">
+                <option value="">Select a pilot type</option>
+                <option value="Individual">Individual</option>
+                <option value="Team">Team</option>
+                <option value="Organization">Organization</option>
+              </select>
             </div>
           </div>
           <div class="pilot-form-row">
@@ -436,6 +441,7 @@
     </div>
     <img src="images/imagine-future-together.jpg" alt="People commit to futures they help imagine" class="footer-image" data-aos="fade-up">
     <p class="footer-caption">&ldquo;People commit to futures they help imagine.&rdquo;</p>
+    <p style="text-align:center; margin-top:32px; font-size:0.85rem; color:rgba(255,255,255,0.4);">&copy; 2026 Heliotrope Imaginal Education Systems, Inc. All rights reserved. &nbsp;|&nbsp; <a href="privacy-policy.html" style="color:rgba(255,255,255,0.5);">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html" style="color:rgba(255,255,255,0.5);">Terms &amp; Conditions</a></p>
   </div>
 </footer>
 
@@ -452,9 +458,14 @@
     document.querySelectorAll('.pilot-card').forEach(function(c) { c.classList.remove('selected'); });
     el.classList.add('selected');
     pilotSelectedType = el.dataset.type;
-    var display = document.getElementById('pilotTypeDisplay');
-    display.textContent = pilotSelectedType;
-    display.classList.add('filled');
+    document.getElementById('pilotTypeSelect').value = pilotSelectedType;
+  }
+  function selectPilotFromDropdown(value) {
+    pilotSelectedType = value;
+    document.querySelectorAll('.pilot-card').forEach(function(c) {
+      if (c.dataset.type === value) { c.classList.add('selected'); }
+      else { c.classList.remove('selected'); }
+    });
   }
   function handlePilotSubmit(e) {
     e.preventDefault();
@@ -469,8 +480,9 @@
 
     if (!fullName) { document.getElementById('pilotFullName').classList.add('invalid'); valid = false; }
     if (!email) { document.getElementById('pilotEmail').classList.add('invalid'); valid = false; }
+    pilotSelectedType = pilotSelectedType || document.getElementById('pilotTypeSelect').value;
     if (!pilotSelectedType) {
-      errorEl.textContent = 'Please select a pilot type in Step 1.';
+      errorEl.textContent = 'Please select a pilot type.';
       errorEl.style.display = 'block';
       return;
     }
