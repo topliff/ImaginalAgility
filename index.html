@@ -388,6 +388,10 @@
             <div class="pilot-form-label">What draws you to this pilot?</div>
             <div class="pilot-form-field"><textarea id="pilotWhatDraws" rows="3"></textarea></div>
           </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">What stood out to you in the Imaginal Agility video?</div>
+            <div class="pilot-form-field"><textarea id="pilotVideoStandout" rows="3"></textarea></div>
+          </div>
         </div>
 
         <div class="pilot-form-error" id="pilotFormError"></div>
@@ -478,7 +482,8 @@
       role: document.getElementById('pilotRole').value.trim(),
       country: document.getElementById('pilotCountry').value.trim(),
       pilotType: pilotSelectedType,
-      whatDraws: document.getElementById('pilotWhatDraws').value.trim()
+      whatDraws: document.getElementById('pilotWhatDraws').value.trim(),
+      videoStandout: document.getElementById('pilotVideoStandout').value.trim()
     };
 
     fetch('https://script.google.com/macros/s/AKfycbxZAOkLMRlyK_WAu8pN_dQgcthXf-Df10sAmzjObixEah76kavqmUoCJQgiWfmQKKwd/exec', {

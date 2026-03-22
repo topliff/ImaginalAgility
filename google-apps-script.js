@@ -45,7 +45,8 @@ function ensureHeaders(sheet) {
       'Role/Title',
       'Country',
       'Pilot Type',
-      'What Draws You'
+      'What Draws You',
+      'Video Standout'
     ];
     sheet.appendRow(headers);
     sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
@@ -66,7 +67,8 @@ function doPost(e) {
       data.role || '',
       data.country || '',
       data.pilotType || '',
-      data.whatDraws || ''
+      data.whatDraws || '',
+      data.videoStandout || ''
     ]);
 
     return ContentService
