@@ -1,53 +1,39 @@
 /**
- * Imaginal Agility — Pilot Signup Google Apps Script
+ * Imaginal Agility — Web Forms Google Apps Script
+ *
+ * Handles two form types: "pilot" and "contact"
+ * Each writes to its own tab in the same spreadsheet.
  *
  * Setup:
- * 1. Go to https://script.google.com and create a new project
- * 2. Paste this entire file into Code.gs
- * 3. Click Deploy > New deployment
- * 4. Select "Web app"
- * 5. Set "Execute as" → Me
- * 6. Set "Who has access" → Anyone
- * 7. Click Deploy and copy the URL
+ * 1. Rename your Google Sheet to "Imaginal Agility Web Forms"
+ * 2. Rename the existing "Responses" tab to "Pilot Signups"
+ * 3. Paste this entire file into Code.gs
+ * 4. Click Deploy > Manage deployments > Edit > New version > Deploy
  */
 
-const SHEET_NAME = 'Pilot Signups';
-const TAB_NAME = 'Responses';
-
-function getOrCreateSheet() {
-  let ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // If run standalone (not bound to a sheet), create one
+function getSpreadsheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
   if (!ss) {
-    const files = DriveApp.getFilesByName(SHEET_NAME);
+    var files = DriveApp.getFilesByName('Imaginal Agility Web Forms');
     if (files.hasNext()) {
       ss = SpreadsheetApp.open(files.next());
     } else {
-      ss = SpreadsheetApp.create(SHEET_NAME);
+      ss = SpreadsheetApp.create('Imaginal Agility Web Forms');
     }
   }
+  return ss;
+}
 
-  let sheet = ss.getSheetByName(TAB_NAME);
+function getOrCreateTab(ss, tabName) {
+  var sheet = ss.getSheetByName(tabName);
   if (!sheet) {
-    sheet = ss.insertSheet(TAB_NAME);
+    sheet = ss.insertSheet(tabName);
   }
-
   return sheet;
 }
 
-function ensureHeaders(sheet) {
+function ensureHeaders(sheet, headers) {
   if (sheet.getLastRow() === 0) {
-    const headers = [
-      'Timestamp',
-      'Full Name',
-      'Email Address',
-      'Organisation/Company',
-      'Role/Title',
-      'Country',
-      'Pilot Type',
-      'What Draws You',
-      'Video Standout'
-    ];
     sheet.appendRow(headers);
     sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
   }
@@ -55,21 +41,38 @@ function ensureHeaders(sheet) {
 
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
-    const sheet = getOrCreateSheet();
-    ensureHeaders(sheet);
+    var data = JSON.parse(e.postData.contents);
+    var ss = getSpreadsheet();
+    var formType = data.formType || 'pilot';
 
-    sheet.appendRow([
-      new Date(),
-      data.fullName || '',
-      data.email || '',
-      data.organisation || '',
-      data.role || '',
-      data.country || '',
-      data.pilotType || '',
-      data.whatDraws || '',
-      data.videoStandout || ''
-    ]);
+    if (formType === 'contact') {
+      var sheet = getOrCreateTab(ss, 'Contact Form');
+      ensureHeaders(sheet, ['Timestamp', 'Name', 'Email', 'Subject', 'Message']);
+      sheet.appendRow([
+        new Date(),
+        data.name || '',
+        data.email || '',
+        data.subject || '',
+        data.message || ''
+      ]);
+    } else {
+      var sheet = getOrCreateTab(ss, 'Pilot Signups');
+      ensureHeaders(sheet, [
+        'Timestamp', 'Full Name', 'Email Address', 'Organisation/Company',
+        'Role/Title', 'Country', 'Pilot Type', 'What Draws You', 'Video Standout'
+      ]);
+      sheet.appendRow([
+        new Date(),
+        data.fullName || '',
+        data.email || '',
+        data.organisation || '',
+        data.role || '',
+        data.country || '',
+        data.pilotType || '',
+        data.whatDraws || '',
+        data.videoStandout || ''
+      ]);
+    }
 
     return ContentService
       .createTextOutput(JSON.stringify({ status: 'success' }))
@@ -83,6 +86,6 @@ function doPost(e) {
 
 function doGet(e) {
   return ContentService
-    .createTextOutput(JSON.stringify({ status: 'ok', message: 'Pilot Signup script is running.' }))
+    .createTextOutput(JSON.stringify({ status: 'ok', message: 'Imaginal Agility Web Forms script is running.' }))
     .setMimeType(ContentService.MimeType.JSON);
 }

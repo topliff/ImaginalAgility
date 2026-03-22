@@ -435,7 +435,7 @@
       <div>
         <h4>Connect</h4>
         <ul>
-          <li><a href="#">Contact Us</a></li>
+          <li><a href="#" onclick="openContactModal(event)">Contact Us</a></li>
         </ul>
       </div>
     </div>
@@ -444,6 +444,38 @@
     <p style="text-align:center; margin-top:32px; font-size:0.85rem; color:rgba(255,255,255,0.4);">&copy; 2026 Heliotrope Imaginal Education Systems, Inc. All rights reserved. &nbsp;|&nbsp; <a href="privacy-policy.html" style="color:rgba(255,255,255,0.5);">Privacy Policy</a> &nbsp;|&nbsp; <a href="terms.html" style="color:rgba(255,255,255,0.5);">Terms &amp; Conditions</a></p>
   </div>
 </footer>
+
+<!-- CONTACT MODAL -->
+<div id="contactModal" style="display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); align-items:center; justify-content:center;">
+  <div style="background:linear-gradient(135deg, #1a0e3a 0%, #0d0a2c 100%); border:1px solid rgba(255,255,255,0.15); border-radius:12px; max-width:520px; width:90%; padding:36px; position:relative;">
+    <button onclick="closeContactModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:rgba(255,255,255,0.5); font-size:24px; cursor:pointer;">&times;</button>
+    <h2 style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:1.5rem; color:#fff; margin-bottom:16px;">Contact Us</h2>
+    <form id="contactForm" onsubmit="handleContactSubmit(event)">
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; color:#fff; margin-bottom:4px; font-size:0.9rem;">Name *</label>
+        <input type="text" id="contactName" required style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:10px 12px; color:#fff; font-family:'Heebo',sans-serif; font-size:16px; outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; color:#fff; margin-bottom:4px; font-size:0.9rem;">Email *</label>
+        <input type="email" id="contactEmail" required style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:10px 12px; color:#fff; font-family:'Heebo',sans-serif; font-size:16px; outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; color:#fff; margin-bottom:4px; font-size:0.9rem;">Subject</label>
+        <input type="text" id="contactSubject" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:10px 12px; color:#fff; font-family:'Heebo',sans-serif; font-size:16px; outline:none;">
+      </div>
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; color:#fff; margin-bottom:4px; font-size:0.9rem;">Message *</label>
+        <textarea id="contactMessage" required rows="4" style="width:100%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.2); border-radius:6px; padding:10px 12px; color:#fff; font-family:'Heebo',sans-serif; font-size:16px; outline:none; resize:vertical;"></textarea>
+      </div>
+      <div id="contactError" style="display:none; background:rgba(220,50,50,0.15); border:1px solid rgba(220,50,50,0.4); color:#f99; padding:10px 14px; border-radius:6px; margin-bottom:14px;"></div>
+      <button type="submit" class="btn-solid" id="contactSubmitBtn" style="width:100%; font-size:1rem;">Send Message</button>
+    </form>
+    <div id="contactSuccess" style="display:none; text-align:center; padding:24px 0;">
+      <h3 style="color:#fff; margin-bottom:8px;">Message Sent!</h3>
+      <p style="color:rgba(255,255,255,0.7);">We'll get back to you soon.</p>
+    </div>
+  </div>
+</div>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
@@ -497,6 +529,7 @@
     btn.textContent = 'Submitting...';
 
     var payload = {
+      formType: 'pilot',
       fullName: fullName,
       email: email,
       organisation: document.getElementById('pilotOrganisation').value.trim(),
@@ -516,10 +549,66 @@
       document.getElementById('pilotFormSection').style.display = 'none';
       document.getElementById('pilotSuccessSection').style.display = 'block';
     }).catch(function() {
-      errorEl.textContent = 'Something went wrong. Please try again or email us at hello@imaginalagility.com.';
+      errorEl.textContent = 'Something went wrong. Please try again or email us at hello@allstarteams.com.';
       errorEl.style.display = 'block';
       btn.disabled = false;
       btn.textContent = 'Submit My Interest';
+    });
+  }
+
+  // Contact Modal
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZAOkLMRlyK_WAu8pN_dQgcthXf-Df10sAmzjObixEah76kavqmUoCJQgiWfmQKKwd/exec';
+  function openContactModal(e) {
+    if (e) e.preventDefault();
+    var modal = document.getElementById('contactModal');
+    modal.style.display = 'flex';
+    document.getElementById('contactForm').style.display = '';
+    document.getElementById('contactSuccess').style.display = 'none';
+    document.getElementById('contactError').style.display = 'none';
+    document.getElementById('contactForm').reset();
+    document.getElementById('contactSubmitBtn').disabled = false;
+    document.getElementById('contactSubmitBtn').textContent = 'Send Message';
+  }
+  function closeContactModal() {
+    document.getElementById('contactModal').style.display = 'none';
+  }
+  document.getElementById('contactModal').addEventListener('click', function(e) {
+    if (e.target === this) closeContactModal();
+  });
+  function handleContactSubmit(e) {
+    e.preventDefault();
+    var errEl = document.getElementById('contactError');
+    errEl.style.display = 'none';
+    var name = document.getElementById('contactName').value.trim();
+    var email = document.getElementById('contactEmail').value.trim();
+    var message = document.getElementById('contactMessage').value.trim();
+    if (!name || !email || !message) {
+      errEl.textContent = 'Please fill in all required fields.';
+      errEl.style.display = 'block';
+      return;
+    }
+    var btn = document.getElementById('contactSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        formType: 'contact',
+        name: name,
+        email: email,
+        subject: document.getElementById('contactSubject').value.trim(),
+        message: message
+      })
+    }).then(function() {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('contactSuccess').style.display = 'block';
+    }).catch(function() {
+      errEl.textContent = 'Something went wrong. Please try again.';
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
     });
   }
 </script>
