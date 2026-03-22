@@ -292,6 +292,9 @@
         <p>Lead organizational transformation and train facilitators&mdash;implementing systematic imagination development at enterprise scale.</p>
       </div>
     </div>
+    <div class="button-group" style="justify-content:center; margin-top:24px;">
+      <a href="#" class="btn-solid" onclick="openContactModal(event, 'Certification Pathway Inquiry')">I'm Interested!</a>
+    </div>
   </div>
 </section>
 
@@ -558,7 +561,7 @@
 
   // Contact Modal
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZAOkLMRlyK_WAu8pN_dQgcthXf-Df10sAmzjObixEah76kavqmUoCJQgiWfmQKKwd/exec';
-  function openContactModal(e) {
+  function openContactModal(e, subject) {
     if (e) e.preventDefault();
     var modal = document.getElementById('contactModal');
     modal.style.display = 'flex';
@@ -568,6 +571,7 @@
     document.getElementById('contactForm').reset();
     document.getElementById('contactSubmitBtn').disabled = false;
     document.getElementById('contactSubmitBtn').textContent = 'Send Message';
+    if (subject) document.getElementById('contactSubject').value = subject;
   }
   function closeContactModal() {
     document.getElementById('contactModal').style.display = 'none';
