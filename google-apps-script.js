@@ -55,6 +55,15 @@ function doPost(e) {
         data.subject || '',
         data.message || ''
       ]);
+
+      // Email notification
+      var emailSubject = 'New IA Contact Form: ' + (data.subject || '(no subject)');
+      var emailBody = 'Name: ' + (data.name || '') + '\n'
+        + 'Email: ' + (data.email || '') + '\n'
+        + 'Subject: ' + (data.subject || '') + '\n\n'
+        + 'Message:\n' + (data.message || '');
+      MailApp.sendEmail('esbin@5x5teams.com', emailSubject, emailBody, { replyTo: data.email || '' });
+      MailApp.sendEmail('brad@selfactual.com', emailSubject, emailBody, { replyTo: data.email || '' });
     } else {
       var sheet = getOrCreateTab(ss, 'Pilot Signups');
       ensureHeaders(sheet, [
