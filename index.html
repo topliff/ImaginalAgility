@@ -315,8 +315,94 @@
         <div class="stat-label">Pioneer Facilitators</div>
       </div>
     </div>
-    <div class="button-group" style="justify-content:center;">
-      <a href="#movement" class="btn-solid">I'm Interested!</a>
+  </div>
+</section>
+
+<!-- PILOT SIGNUP -->
+<section id="pilot-signup">
+  <div class="container">
+    <div class="label-group">
+      <span class="label">Join the Pilot</span>
+    </div>
+    <h1 data-aos="fade-up">PILOT SIGN UP</h1>
+    <p>Signal your interest in joining the Imaginal Agility Pilot Program. Choose your pilot type below, complete your details, and we'll be in touch within 48 hours to confirm your place.</p>
+
+    <div id="pilotFormSection">
+      <h2 data-aos="fade-up" style="margin-top:32px;">Step 1 — Choose Your Pilot Type</h2>
+
+      <div class="pilot-cards" data-aos="fade-up">
+        <div class="pilot-card" data-type="Individual" onclick="selectPilotCard(this)">
+          <div class="pilot-card-icon">&#x1F464;</div>
+          <div class="pilot-card-title">INDIVIDUAL</div>
+          <p>Individual Solo</p>
+          <p>Self-Directed Microcourse (Web App)</p>
+          <p>~90 minutes</p>
+        </div>
+        <div class="pilot-card" data-type="Team" onclick="selectPilotCard(this)">
+          <div class="pilot-card-icon">&#x1F465;</div>
+          <div class="pilot-card-title">TEAM</div>
+          <p>Up to 10 participants</p>
+          <p>Microcourse + Facilitated Team Workshop (MURAL Whiteboard)</p>
+          <p>Microcourse ~90 min + Workshop ~3 hrs</p>
+        </div>
+        <div class="pilot-card" data-type="Organization" onclick="selectPilotCard(this)">
+          <div class="pilot-card-icon">&#x1F3E2;</div>
+          <div class="pilot-card-title">ORGANIZATION</div>
+          <p>50&ndash;100 participants</p>
+          <p>Microcourse + Facilitated Team Workshops</p>
+          <p>Microcourse ~90 min + Workshops ~3 hrs</p>
+        </div>
+      </div>
+
+      <h2 data-aos="fade-up">Step 2 — Your Details</h2>
+
+      <form id="pilotForm" onsubmit="handlePilotSubmit(event)" data-aos="fade-up">
+        <div class="pilot-form-table">
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Full Name *</div>
+            <div class="pilot-form-field"><input type="text" id="pilotFullName" required></div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Email Address *</div>
+            <div class="pilot-form-field"><input type="email" id="pilotEmail" required></div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Organisation / Company</div>
+            <div class="pilot-form-field"><input type="text" id="pilotOrganisation"></div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Role / Title</div>
+            <div class="pilot-form-field"><input type="text" id="pilotRole"></div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Country</div>
+            <div class="pilot-form-field"><input type="text" id="pilotCountry"></div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">Pilot Type *</div>
+            <div class="pilot-form-field">
+              <div class="pilot-type-display" id="pilotTypeDisplay">Select a pilot type above</div>
+            </div>
+          </div>
+          <div class="pilot-form-row">
+            <div class="pilot-form-label">What draws you to this pilot?</div>
+            <div class="pilot-form-field"><textarea id="pilotWhatDraws" rows="3"></textarea></div>
+          </div>
+        </div>
+
+        <div class="pilot-form-error" id="pilotFormError"></div>
+
+        <p style="font-style:italic; font-size:14px; color:rgba(255,255,255,0.5); margin-bottom:24px;">* Required fields. Your information is held in confidence and used solely to coordinate your pilot participation. We will respond within 48 hours.</p>
+
+        <button type="submit" class="btn-solid" id="pilotSubmitBtn" style="font-size:1.05rem;">Submit My Interest</button>
+      </form>
+
+      <p style="margin-top:24px; font-size:15px; color:rgba(255,255,255,0.5);">&#x1F4E7; Prefer email? Write to us at: <a href="mailto:hello@imaginalagility.com" style="color:#b496e6;">hello@imaginalagility.com</a> | &#x1F310; <a href="https://imaginalagility.com/pilot-signup" style="color:#b496e6;">imaginalagility.com/pilot-signup</a></p>
+    </div>
+
+    <div id="pilotSuccessSection" style="display:none; text-align:center; padding:48px 0;">
+      <h2>Thank You!</h2>
+      <p style="font-size:18px; max-width:560px; margin:0 auto;">Your pilot interest has been submitted. We'll be in touch within 48 hours to confirm your place.</p>
     </div>
   </div>
 </section>
@@ -346,6 +432,70 @@
   document.querySelector('.nav-toggle').addEventListener('click', function() {
     document.querySelector('.nav-buttons').classList.toggle('open');
   });
+
+  // Pilot Signup
+  var pilotSelectedType = '';
+  function selectPilotCard(el) {
+    document.querySelectorAll('.pilot-card').forEach(function(c) { c.classList.remove('selected'); });
+    el.classList.add('selected');
+    pilotSelectedType = el.dataset.type;
+    var display = document.getElementById('pilotTypeDisplay');
+    display.textContent = pilotSelectedType;
+    display.classList.add('filled');
+  }
+  function handlePilotSubmit(e) {
+    e.preventDefault();
+    var errorEl = document.getElementById('pilotFormError');
+    errorEl.style.display = 'none';
+
+    var fullName = document.getElementById('pilotFullName').value.trim();
+    var email = document.getElementById('pilotEmail').value.trim();
+    var valid = true;
+
+    document.querySelectorAll('.pilot-form-field .invalid').forEach(function(el) { el.classList.remove('invalid'); });
+
+    if (!fullName) { document.getElementById('pilotFullName').classList.add('invalid'); valid = false; }
+    if (!email) { document.getElementById('pilotEmail').classList.add('invalid'); valid = false; }
+    if (!pilotSelectedType) {
+      errorEl.textContent = 'Please select a pilot type in Step 1.';
+      errorEl.style.display = 'block';
+      return;
+    }
+    if (!valid) {
+      errorEl.textContent = 'Please fill in all required fields.';
+      errorEl.style.display = 'block';
+      return;
+    }
+
+    var btn = document.getElementById('pilotSubmitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Submitting...';
+
+    var payload = {
+      fullName: fullName,
+      email: email,
+      organisation: document.getElementById('pilotOrganisation').value.trim(),
+      role: document.getElementById('pilotRole').value.trim(),
+      country: document.getElementById('pilotCountry').value.trim(),
+      pilotType: pilotSelectedType,
+      whatDraws: document.getElementById('pilotWhatDraws').value.trim()
+    };
+
+    fetch('https://script.google.com/macros/s/AKfycbxZAOkLMRlyK_WAu8pN_dQgcthXf-Df10sAmzjObixEah76kavqmUoCJQgiWfmQKKwd/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).then(function() {
+      document.getElementById('pilotFormSection').style.display = 'none';
+      document.getElementById('pilotSuccessSection').style.display = 'block';
+    }).catch(function() {
+      errorEl.textContent = 'Something went wrong. Please try again or email us at hello@imaginalagility.com.';
+      errorEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Submit My Interest';
+    });
+  }
 </script>
 </body>
 </html>
