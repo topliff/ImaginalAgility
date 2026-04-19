@@ -356,7 +356,7 @@
         <button type="submit" class="btn-submit" id="submitBtn">Submit My Interest</button>
       </form>
 
-      <p class="footer-line">📧 Prefer email? Write to us at: <a href="mailto:hello@imaginalagility.com">hello@imaginalagility.com</a> | 🌐 <a href="https://imaginalagility.com/pilot-signup">imaginalagility.com/pilot-signup</a></p>
+      <p class="footer-line">📧 Prefer email? Write to us at: <a href="mailto:hello@allstarteams.com">hello@allstarteams.com</a> | 🌐 <a href="https://imaginalagility.com/pilot-signup">imaginalagility.com/pilot-signup</a></p>
     </div>
 
     <div id="successSection" class="success-message" style="display:none;">
@@ -419,6 +419,7 @@
       }
 
       const payload = {
+        origin: 'IA',
         fullName: fullName,
         email: email,
         organisation: document.getElementById('organisation').value.trim(),
@@ -443,7 +444,7 @@
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('successSection').style.display = 'block';
       } catch (err) {
-        showError('Something went wrong. Please try again or email us at hello@imaginalagility.com.');
+        showError('Something went wrong. Please try again or email us at hello@allstarteams.com.');
         btn.disabled = false;
         btn.textContent = 'Submit My Interest';
       }
