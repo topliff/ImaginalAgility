@@ -546,10 +546,13 @@
 
     fetch('https://script.google.com/macros/s/AKfycbxZAOkLMRlyK_WAu8pN_dQgcthXf-Df10sAmzjObixEah76kavqmUoCJQgiWfmQKKwd/exec', {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(payload)
-    }).then(function() {
+    }).then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function(data) {
+      if (data && data.status !== 'success') throw new Error(data.message || 'submit failed');
       document.getElementById('pilotFormSection').style.display = 'none';
       document.getElementById('pilotSuccessSection').style.display = 'block';
     }).catch(function() {
@@ -597,8 +600,7 @@
     btn.textContent = 'Sending...';
     fetch(SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({
         formType: 'contact',
         origin: 'IA',
@@ -607,7 +609,11 @@
         subject: document.getElementById('contactSubject').value.trim(),
         message: message
       })
-    }).then(function() {
+    }).then(function(res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    }).then(function(data) {
+      if (data && data.status !== 'success') throw new Error(data.message || 'submit failed');
       document.getElementById('contactForm').style.display = 'none';
       document.getElementById('contactSuccess').style.display = 'block';
     }).catch(function() {
