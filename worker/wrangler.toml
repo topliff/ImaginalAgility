@@ -1,0 +1,14 @@
+name = "imaginal-forms"
+main = "index.js"
+compatibility_date = "2025-11-01"
+
+[vars]
+AWS_REGION = "us-west-2"
+FROM_EMAIL = "noreply@imaginalmail.com"
+FROM_NAME = "Heliotrope Imaginal"
+TO_EMAILS = "esbin@allstarteams.co,brad@allstarteams.co"
+
+# Secrets set via `wrangler secret put <NAME>`:
+#   AWS_ACCESS_KEY_ID
+#   AWS_SECRET_ACCESS_KEY
+#   APPS_SCRIPT_URL
