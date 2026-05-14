@@ -64,6 +64,20 @@ function doPost(e) {
         + 'Message:\n' + (data.message || '');
       MailApp.sendEmail('esbin@5x5teams.com', emailSubject, emailBody, { replyTo: data.email || '' });
       MailApp.sendEmail('brad@selfactual.com', emailSubject, emailBody, { replyTo: data.email || '' });
+    } else if (formType === 'book') {
+      var sheet = getOrCreateTab(ss, 'Book Signups');
+      ensureHeaders(sheet, [
+        'Timestamp', 'First Name', 'Last Name', 'Email Address',
+        'Organisation/Institution', 'Interests'
+      ]);
+      sheet.appendRow([
+        new Date(),
+        data.firstName || '',
+        data.lastName || '',
+        data.email || '',
+        data.organisation || '',
+        data.interests || ''
+      ]);
     } else {
       var sheet = getOrCreateTab(ss, 'Pilot Signups');
       ensureHeaders(sheet, [

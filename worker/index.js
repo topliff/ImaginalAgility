@@ -24,6 +24,9 @@ export default {
     if (request.method === 'POST' && url.pathname === '/contact') {
       return handleForm(request, env, ctx, 'contact');
     }
+    if (request.method === 'POST' && url.pathname === '/book') {
+      return handleForm(request, env, ctx, 'book');
+    }
 
     return new Response('Not found', { status: 404, headers: CORS_HEADERS });
   },
@@ -136,6 +139,19 @@ function buildEmail(formType, data) {
     lines.push(data.message || '');
     return {
       subject: `New IA Contact: ${data.subject || '(no subject)'}`,
+      text: lines.join('\n'),
+    };
+  }
+
+  if (formType === 'book') {
+    push('First Name', data.firstName);
+    push('Last Name', data.lastName);
+    push('Email', data.email);
+    push('Organisation', data.organisation);
+    push('Interests', data.interests);
+    push('Origin', data.origin);
+    return {
+      subject: `New Book Reservation: ${data.firstName || ''} ${data.lastName || data.email}`,
       text: lines.join('\n'),
     };
   }
